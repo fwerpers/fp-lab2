@@ -91,6 +91,12 @@ fun count (Node (label, [])) = 1
 fun labels (Node (label, [])) = [label]
   | labels (Node (label, (c::cs))) = labels c @ labels (Node (label, cs));
 
-fun is_present tree label = true;
+fun is_present tree x =
+let
+  fun helper (Node (label, [])) = if label=x then true else false
+    | helper (Node (label, (c::cs))) = helper c orelse helper (Node (label, cs))
+in
+  helper tree
+end;
 
 fun height x = 1;
