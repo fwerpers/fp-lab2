@@ -5,8 +5,8 @@
    PRE: n >= 0
    POST: returns a list [0,...,n]
 *)
-fun iota 0 = [0]
-  | iota n = iota (n-1) @ [n];
+fun iota 0 = []
+  | iota n = iota (n-1) @ [n-1];
 
 (* 2. Intersection *)
 
