@@ -85,11 +85,12 @@ datatype 'a ltree = Node of 'a * 'a ltree list;
 
 (* fun count (Node (node, [])) = 1; *)
 
-fun count (Node (node, [])) = 1
-  | count (Node (node, (c::cs))) = (count c) + count (Node (node, cs));
+fun count (Node (label, [])) = 1
+  | count (Node (label, (c::cs))) = (count c) + count (Node (label, cs));
 
-fun labels x = [];
+fun labels (Node (label, [])) = [label]
+  | labels (Node (label, (c::cs))) = labels c @ labels (Node (label, cs));
 
-fun is_present x y = true;
+fun is_present tree label = true;
 
 fun height x = 1;
