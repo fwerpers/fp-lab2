@@ -25,7 +25,10 @@ fun iota n =
    PRE: true
    POST: returns true if x is a member of l, otherwise false
 *)
-fun member (x : int) l = List.exists (fn y => y=x) l;
+fun member x l = List.exists (fn y => y=x) l;
+
+fun member' x [] = false
+  | member' x (y::ys) = x=y orelse (member' x ys);
 
 (* inter s1 s2
    TYPE: int list -> int list -> int list
@@ -34,7 +37,7 @@ fun member (x : int) l = List.exists (fn y => y=x) l;
 *)
 fun inter s1 s2 =
   let
-    fun helper [] (s : int list) = s
+    fun helper [] s = s
       | helper (x::s1) s = if member x s2 then helper s1 (x::s) else helper s1 s
   in
     helper s1 []
@@ -45,9 +48,20 @@ fun inter s1 s2 =
    PRE: true
    POST: returns the intersection of s1 and s2
 *)
-fun inter' s1 s2 = [];
-
-fun inter' (x::s1) (y::s2) = [];
+fun inter' s1 s2 =
+  let
+    fun helper [] s2 s = s
+      | helper s1 [] s = s
+      | helper (x::s1) (y::s2) s = 
+        if x < y then
+          helper s1 (y::s2) s
+        else if x=y then
+          helper s1 s2 (x::s)
+        else
+          helper (y::s2) (x::s1) s
+  in
+    rev (helper s1 s2 [])
+  end;
 
 (* 3. Fruit *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
