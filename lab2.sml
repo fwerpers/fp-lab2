@@ -11,6 +11,13 @@ fun iota 0 = []
 
 (* 2. Intersection *)
 
+(* member x l
+   TYPE: int -> int list -> bool
+   PRE: true
+   POST: returns true if x is a member of l, otherwise false
+*)
+fun member (x : int) l = List.exists (fn y => y=x) l;
+
 (* inter s1 s2
    TYPE: int list -> int list -> int list
    PRE: true
