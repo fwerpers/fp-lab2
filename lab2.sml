@@ -29,7 +29,8 @@ datatype fruit = Apple of real | Banana of real | Lemon of int
 fun sumPrice a b c d = 2.0;
 
 (* 4. Trees *)
-datatype ('a) ltree = Node of 'a
+(* Look at lecture example of binary tree and use a list of children *)
+datatype 'a ltree = Node of 'a
 
 fun count x = 3;
 
