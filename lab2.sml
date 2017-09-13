@@ -76,11 +76,6 @@ in
   sum fruit_list
 end;
 
-fun sum (Apple x::xs) = x;
-
-fun sum [] = 0.0 
-  | sum (Apple x::xs) = x;
-
 (* 4. Trees *)
 (* Look at lecture example of binary tree and use a list of children *)
 datatype 'a ltree = Node of 'a
