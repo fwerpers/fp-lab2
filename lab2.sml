@@ -23,14 +23,27 @@ fun member (x : int) l = List.exists (fn y => y=x) l;
    PRE: true
    POST: returns the intersection of s1 and s2
 *)
-fun inter s1 s2 = []
+
+(* Modify only one of the lists
+For each recursion, check membership of the head
+If member, move to tail of the list
+Else remove from list
+When do we know we're done? *)
+
+fun inter (s1 : int list) (s2 : int list) =
+  let
+    fun helper [] (s2 : int list) (s : int list) = s
+      | helper (x::s1) s2 s = if member x s2 then helper s1 s2 (x::s) else helper s1 s2 s
+  in
+    helper s1 s2 []
+  end;
 
 (* inter s1 s2
    TYPE: int list -> int list -> int list
    PRE: true
    POST: returns the intersection of s1 and s2
 *)
-fun inter' s1 s2 = []
+fun inter' s1 s2 = [];
 
 (* 3. Fruit *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
