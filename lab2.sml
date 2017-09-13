@@ -32,13 +32,12 @@ fun member (x : int) l = List.exists (fn y => y=x) l;
    PRE: true
    POST: returns the intersection of s1 and s2
 *)
-
-fun inter (s1 : int list) (s2 : int list) =
+fun inter s1 s2 =
   let
-    fun helper [] (s2 : int list) (s : int list) = s
-      | helper (x::s1) s2 s = if member x s2 then helper s1 s2 (x::s) else helper s1 s2 s
+    fun helper [] (s : int list) = s
+      | helper (x::s1) s = if member x s2 then helper s1 (x::s) else helper s1 s
   in
-    helper s1 s2 []
+    helper s1 []
   end;
 
 (* inter s1 s2
@@ -47,6 +46,8 @@ fun inter (s1 : int list) (s2 : int list) =
    POST: returns the intersection of s1 and s2
 *)
 fun inter' s1 s2 = [];
+
+fun inter' (x::s1) (y::s2) = [];
 
 (* 3. Fruit *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
