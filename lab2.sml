@@ -9,6 +9,15 @@
 fun iota 0 = []
   | iota n = iota (n-1) @ [n-1];
 
+(* This is a lot faster for some reason *)
+fun iota' n =
+  let
+    fun helper 0 = [0]
+      | helper n = n :: helper (n-1)
+  in
+    rev (helper (n-1))
+  end;
+
 (* 2. Intersection *)
 
 (* member x l
