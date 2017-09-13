@@ -99,4 +99,8 @@ in
   helper tree
 end;
 
-fun height x = 1;
+fun height (Node (label, [])) = 1
+  | height (Node (label, (c::cs))) = 1 + Int.max((height c), height (Node (label, cs)) - 1);
+
+(* fun max_height [] = 0
+  | max_height tree_list =  *)
