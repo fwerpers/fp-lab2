@@ -78,9 +78,15 @@ end;
 
 (* 4. Trees *)
 (* Look at lecture example of binary tree and use a list of children *)
-datatype 'a ltree = Node of 'a
+(* datatype 'a ltree = Leaf of 'a
+                  | Node of 'a * 'a ltree list; *)
 
-fun count x = 3;
+datatype 'a ltree = Node of 'a * 'a ltree list;
+
+(* fun count (Node (node, [])) = 1; *)
+
+fun count (Node (node, [])) = 1
+  | count (Node (node, (c::cs))) = (count c) + count (Node (node, cs));
 
 fun labels x = [];
 
