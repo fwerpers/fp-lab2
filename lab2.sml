@@ -65,7 +65,21 @@ fun inter' s1 s2 =
 
 (* 3. Fruit *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
-fun sumPrice a b c d = 2.0;
+
+fun sumPrice fruit_list apple_price banana_price lemon_price =
+let
+  fun sum [] = 0.0
+    | sum (Apple x::xs) = x*apple_price + sum xs
+    | sum (Banana x::xs) = x*banana_price + sum xs
+    | sum (Lemon x::xs) = Real.fromInt(x)*lemon_price + sum xs
+in
+  sum fruit_list
+end;
+
+fun sum (Apple x::xs) = x;
+
+fun sum [] = 0.0 
+  | sum (Apple x::xs) = x;
 
 (* 4. Trees *)
 (* Look at lecture example of binary tree and use a list of children *)
