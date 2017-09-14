@@ -74,7 +74,7 @@ datatype fruit = Apple of real | Banana of real | Lemon of int
 *)
 fun sumPrice fruit_list apple_price banana_price lemon_price =
 let
-(* sum basket
+  (* sum basket
      TYPE: fruit list -> real
      PRE: true
      POST: summed price of fruit list
@@ -94,6 +94,7 @@ end;
    REPRESENTATION INVARIANT: a tree has at least one node
 *)
 datatype 'a ltree = Node of 'a * 'a ltree list;
+
 
 fun count (Node (label, [])) = 1
   | count (Node (label, (c::cs))) = (count c) + count (Node (label, cs));
