@@ -61,6 +61,9 @@ fun inter' s1 [] = []
     inter' (elem1::r1) r2
 
 (* 3. Fruit *)
+(* REPRESENTATION CONVENTION: amount of fruit
+   REPRESENTATION INVARIANT: amounts should be positive
+*)
 datatype fruit = Apple of real | Banana of real | Lemon of int
 
 (* sumPrice f a b l
@@ -87,7 +90,9 @@ in
 end;
 
 (* 4. Trees *)
-
+(* REPRESENTATION CONVENTION: tree of nodes with an arbitrary number of children
+   REPRESENTATION INVARIANT: a tree has at least one node
+*)
 datatype 'a ltree = Node of 'a * 'a ltree list;
 
 fun count (Node (label, [])) = 1
