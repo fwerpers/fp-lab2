@@ -63,12 +63,25 @@ fun inter' s1 [] = []
 (* 3. Fruit *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
 
+(* sumPrice f a b l
+   TYPE: fruit list -> real -> real -> real -> real
+   PRE: a, b, l > 0
+   POST: the cost of all fruit in f
+   EXAMPLE: sumPrice [Apple 1.5, Banana 0.5, Lemon 5] 1.0 2.0 3.0 = 17.5
+*)
 fun sumPrice fruit_list apple_price banana_price lemon_price =
 let
+(* sum basket
+     TYPE: fruit list -> real
+     PRE: true
+     POST: summed price of fruit list
+     EXAMPLE: as above
+  *)
+  (* VARIANT: number of fruits in basket *)
   fun sum [] = 0.0
     | sum (Apple x::xs) = x*apple_price + sum xs
     | sum (Banana x::xs) = x*banana_price + sum xs
-    | sum (Lemon x::xs) = Real.fromInt(x)*lemon_price + sum xs
+    | sum (Lemon x::xs) = real(x)*lemon_price + sum xs
 in
   sum fruit_list
 end;
