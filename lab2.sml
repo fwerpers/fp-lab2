@@ -33,17 +33,15 @@ fun member x [] = false
   | member x (y::ys) = x=y orelse (member x ys);
 
 (* inter s1 s2
-   TYPE: int list -> int list -> int list
-   PRE: true
-   POST: returns the intersection of s1 and s2
+   TYPE: ''a list -> ''a list -> ''a list
+   PRE: elements of s1 and s2 are not repeated
+   POST: intersection between s1 and s2
+   EXAMPLES: inter [12, 8, 4, 1] [15, 12, 9, 3, 1] = [12, 1]
 *)
-fun inter s1 s2 =
-  let
-    fun helper [] s = s
-      | helper (x::s1) s = if member x s2 then helper s1 (x::s) else helper s1 s
-  in
-    helper s1 []
-  end;
+(* VARIANT: length of s1 *)
+fun inter s1 [] = []
+  | inter [] s2 = []
+  | inter (elem::r1) s2 = if member elem s2 then elem :: (inter r1 s2) else inter r1 s2
 
 (* inter s1 s2
    TYPE: int list -> int list -> int list
