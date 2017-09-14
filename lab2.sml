@@ -2,21 +2,25 @@
 
 (* iota n
    TYPE: int -> int list
-   PRE: n >= 0
-   POST: returns a list [0,...,n]
+   PRE: n > 1
+   POST: integers 0, 1, ... n-1
+   EXAMPLE: iota 4 = [0, 1, 2, 3]
 *)
-(* VARIANT: n *)
-fun iota' 0 = []
-  | iota' n = iota' (n-1) @ [n-1];
-
-(* This is a lot faster for some reason *)
-fun iota n =
-  let
-    fun helper 0 = []
-      | helper n = (n-1) :: helper (n-1)
-  in
-    rev (helper (n))
-  end;
+fun iota N =
+    let
+        (* naturalInterval m n
+     	   TYPE: int*int -> int list
+     	   PRE: true
+     	   POST: all integers of the interval [m, n] in order
+     	   EXAMPLE: naturalInterval 0 4 = [0, 1, 2, 3, 4]
+        *)
+     	(* Similar to function upto from Paulson: ML for the working programmer *)
+        (* VARIANT: n - m *)
+     	fun naturalInterval (m, n) =
+     	    if m > n then [] else m :: (naturalInterval (m+1, n))
+    in
+ 	    naturalInterval(0, N - 1)
+    end
 
 (* 2. Intersection *)
 
@@ -25,10 +29,8 @@ fun iota n =
    PRE: true
    POST: returns true if x is a member of l, otherwise false
 *)
-fun member x l = List.exists (fn y => y=x) l;
-
-fun member' x [] = false
-  | member' x (y::ys) = x=y orelse (member' x ys);
+fun member x [] = false
+  | member x (y::ys) = x=y orelse (member x ys);
 
 (* inter s1 s2
    TYPE: int list -> int list -> int list
@@ -52,7 +54,7 @@ fun inter' s1 s2 =
   let
     fun helper [] s2 s = s
       | helper s1 [] s = s
-      | helper (x::s1) (y::s2) s = 
+      | helper (x::s1) (y::s2) s =
         if x < y then
           helper s1 (y::s2) s
         else if x=y then
