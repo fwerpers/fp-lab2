@@ -43,25 +43,22 @@ fun inter s1 [] = []
   | inter [] s2 = []
   | inter (elem::r1) s2 = if member elem s2 then elem :: (inter r1 s2) else inter r1 s2
 
-(* inter s1 s2
-   TYPE: int list -> int list -> int list
-   PRE: true
-   POST: returns the intersection of s1 and s2
+(* inter' s1 s2
+TYPE: ''a list -> ''a list -> ''a list
+PRE: elements of s1 and s2 are not repeated and ordered (ascending)
+POST: intesection between s1 and s2
+EXAMPLES: inter' [1, 4, 8, 12] [1, 3, 9, 12, 15] = [1, 12]
 *)
-fun inter' s1 s2 =
-  let
-    fun helper [] s2 s = s
-      | helper s1 [] s = s
-      | helper (x::s1) (y::s2) s =
-        if x < y then
-          helper s1 (y::s2) s
-        else if x=y then
-          helper s1 s2 (x::s)
-        else
-          helper (y::s2) (x::s1) s
-  in
-    rev (helper s1 s2 [])
-  end;
+(* VARIANT: length of s1 + length of s2 *)
+fun inter' s1 [] = []
+  | inter' [] s2 = []
+  | inter' (elem1::r1) (elem2::r2) =
+  if elem1 = elem2 then
+    elem1 :: (inter' r1 r2)
+  else if elem1 < elem2 then
+    inter' r1 (elem2::r2)
+  else
+    inter' (elem1::r1) r2
 
 (* 3. Fruit *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
