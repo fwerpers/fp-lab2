@@ -95,13 +95,30 @@ end;
 *)
 datatype 'a ltree = Node of 'a * 'a ltree list;
 
-
+(* count tree
+   TYPE: 'a ltree -> int
+   PRE: true
+   POST: the number of nodes in the tree
+   EXAMPLE: count Node ("hej", []) = 1;
+*)
 fun count (Node (label, [])) = 1
   | count (Node (label, (c::cs))) = (count c) + count (Node (label, cs));
 
+(* labels tree
+   TYPE: 'a ltree -> 'a list
+   PRE: true
+   POST: list of labels in the tree
+   EXAMPLE: labels Node ("hej", []) = ["hej"];
+*)
 fun labels (Node (label, [])) = [label]
   | labels (Node (label, (c::cs))) = labels c @ labels (Node (label, cs));
 
+(* is_present tree x
+   TYPE: 'a ltree -> 'a -> bool
+   PRE: true
+   POST: returns true if x is a label in tree, otherwise false
+   EXAMPLE: is_present Node ("hej", []) "hej" = true;
+*)
 fun is_present tree x =
 let
   fun helper (Node (label, [])) = if label=x then true else false
@@ -110,5 +127,11 @@ in
   helper tree
 end;
 
+(* height tree
+   TYPE: 'a ltree -> int
+   PRE: true
+   POST: returns the height of the tree
+   EXAMPLE: height Node ("hej", []) = 1;
+*)
 fun height (Node (label, [])) = 1
   | height (Node (label, (c::cs))) = 1 + Int.max((height c), height (Node (label, cs)) - 1);
