@@ -14,8 +14,8 @@ fun iota N =
      	   POST: all integers of the interval [m, n] in order
      	   EXAMPLE: naturalInterval 0 4 = [0, 1, 2, 3, 4]
         *)
-     	(* Similar to function upto from Paulson: ML for the working programmer *)
-        (* VARIANT: n - m *)
+     	(* Similar to function 'upto' from Paulson: ML for the working programmer *)
+        (* VARIANT: max(n - m, 0) *)
      	fun naturalInterval (m, n) =
      	    if m > n then [] else m :: (naturalInterval (m+1, n))
     in
@@ -25,10 +25,12 @@ fun iota N =
 (* 2. Intersection *)
 
 (* member x l
-   TYPE: int -> int list -> bool
+   TYPE: ''a -> ''a list -> bool
    PRE: true
    POST: returns true if x is a member of l, otherwise false
+   EXAMPLES: member 4 [1, 2, 3] = false
 *)
+(* VARIANT: length of l *)
 fun member x [] = false
   | member x (y::ys) = x=y orelse (member x ys);
 
@@ -39,8 +41,7 @@ fun member x [] = false
    EXAMPLES: inter [12, 8, 4, 1] [15, 12, 9, 3, 1] = [12, 1]
 *)
 (* VARIANT: length of s1 *)
-fun inter s1 [] = []
-  | inter [] s2 = []
+fun inter [] s2 = []
   | inter (elem::r1) s2 = if member elem s2 then elem :: (inter r1 s2) else inter r1 s2
 
 (* inter' s1 s2
@@ -61,8 +62,8 @@ fun inter' s1 [] = []
     inter' (elem1::r1) r2
 
 (* 3. Fruit *)
-(* REPRESENTATION CONVENTION: amount of fruit
-   REPRESENTATION INVARIANT: amounts should be positive
+(* REPRESENTATION CONVENTION: amount of fruit relevant for pricing
+   REPRESENTATION INVARIANT: amounts should be non-negative
 *)
 datatype fruit = Apple of real | Banana of real | Lemon of int
 
@@ -90,8 +91,8 @@ in
 end;
 
 (* 4. Trees *)
-(* REPRESENTATION CONVENTION: tree of nodes with an arbitrary number of children
-   REPRESENTATION INVARIANT: a tree has at least one node
+(* REPRESENTATION CONVENTION: generic
+   REPRESENTATION INVARIANT: none
 *)
 datatype 'a ltree = Node of 'a * 'a ltree list;
 
@@ -101,6 +102,7 @@ datatype 'a ltree = Node of 'a * 'a ltree list;
    POST: the number of nodes in the tree
    EXAMPLE: count Node ("hej", []) = 1;
 *)
+(* VARIANT: number of nodes in the tree *)
 fun count (Node (label, [])) = 1
   | count (Node (label, (c::cs))) = (count c) + count (Node (label, cs));
 
@@ -110,6 +112,7 @@ fun count (Node (label, [])) = 1
    POST: list of labels in the tree
    EXAMPLE: labels Node ("hej", []) = ["hej"];
 *)
+(* VARIANT: count tree *)
 fun labels (Node (label, [])) = [label]
   | labels (Node (label, (c::cs))) = labels c @ labels (Node (label, cs));
 
@@ -119,6 +122,7 @@ fun labels (Node (label, [])) = [label]
    POST: returns true if x is a label in tree, otherwise false
    EXAMPLE: is_present Node ("hej", []) "hej" = true;
 *)
+(* VARIANT: count tree *)
 fun is_present tree x =
 let
   fun helper (Node (label, [])) = if label=x then true else false
@@ -133,5 +137,6 @@ end;
    POST: returns the height of the tree
    EXAMPLE: height Node ("hej", []) = 1;
 *)
+(* VARIANT: count tree *)
 fun height (Node (label, [])) = 1
   | height (Node (label, (c::cs))) = 1 + Int.max((height c), height (Node (label, cs)) - 1);
