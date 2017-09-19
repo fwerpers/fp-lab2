@@ -96,6 +96,16 @@ end;
 *)
 datatype 'a ltree = Node of 'a * 'a ltree list;
 
+(* Test trees *)
+val test_tree1 = Node ("hej", []);
+            val test_tree2 = Node (1, [Node (2, [])]);
+            val test_tree3 = Node ("hej",
+                                   [Node ("hello", [Node ("ni hao", [Node ("ahoj", [])])]),
+                                    Node ("bonjour", [Node ("privet", [Node ("guten tag", [])])]),
+                                    Node ("namaste", [Node ("ciao", [Node ("As-salam alaykom", [Node ("saluton", [Node ("hei", [Node ("halo", [])])]),
+                                                                                                Node ("kon-nichiwa", [Node ("an-nyong ha-se-yo ", [Node ("ola", [])])]),
+                                                                                                Node ("sa-wat-dee", [Node ("selam", [Node ("jambo", [])])])])])])]);
+
 (* count tree
    TYPE: 'a ltree -> int
    PRE: true
@@ -103,8 +113,24 @@ datatype 'a ltree = Node of 'a * 'a ltree list;
    EXAMPLE: count Node ("hej", []) = 1;
 *)
 (* VARIANT: number of nodes in the tree *)
-fun count (Node (label, [])) = 1
-  | count (Node (label, (c::cs))) = (count c) + count (Node (label, cs));
+fun count' (Node (label, [])) = 1
+  | count' (Node (label, (c::cs))) = (count' c) + count' (Node (label, cs));
+
+(* Alternative implementation, same specification *)
+(* VARIANT: count tree *)
+fun count (Node(_, children)) = 
+let
+  (* count_descendants children
+     TYPE: 'a tree list -> int
+     PRE: true
+     POST: sum of nodes for the trees in children
+  *)
+  (* VARIANT: length of children *)
+  fun count_descendants [] = 0
+    | count_descendants (child::siblings) = count child + count_descendants siblings
+in
+  1 + count_descendants children
+end
 
 (* labels tree
    TYPE: 'a ltree -> 'a list
@@ -113,8 +139,24 @@ fun count (Node (label, [])) = 1
    EXAMPLE: labels Node ("hej", []) = ["hej"];
 *)
 (* VARIANT: count tree *)
-fun labels (Node (label, [])) = [label]
-  | labels (Node (label, (c::cs))) = labels c @ labels (Node (label, cs));
+fun labels' (Node (label, [])) = [label]
+  | labels' (Node (label, (c::cs))) = labels' c @ labels' (Node (label, cs));
+
+(* Alternative implementation, same specification *)
+fun labels (Node(label, children)) =
+let
+  (* name_descendants tree names
+     TYPE: 'a ltree list -> a' list -> a' list
+     PRE: true
+     POST: labels of trees in list appended to names
+  *)
+  (* VARIANT: *)
+  fun name_descendants [] name_list  = name_list
+    | name_descendants (Node(label, grandchildren)::siblings) name_list = 
+        label :: (name_descendants grandchildren (name_descendants siblings name_list))
+in 
+   label :: (name_descendants children [])
+end
 
 (* is_present tree x
    TYPE: 'a ltree -> 'a -> bool
@@ -123,13 +165,31 @@ fun labels (Node (label, [])) = [label]
    EXAMPLE: is_present Node ("hej", []) "hej" = true;
 *)
 (* VARIANT: count tree *)
-fun is_present tree x =
+fun is_present' tree x =
 let
   fun helper (Node (label, [])) = if label=x then true else false
     | helper (Node (label, (c::cs))) = helper c orelse helper (Node (label, cs))
 in
   helper tree
 end;
+
+(* Alternative implementation, same specification *)
+fun is_present (Node(rootlabel, children)) wanted =
+let 
+  (* amongst_descedants tree label
+     TYPE: 'a ltree list -> bool
+     PRE: true
+     POST: does label match any node in list of trees
+  *)
+  (* VARIANT: length of tree *)
+  fun amongst_descendants [] = false
+    | amongst_descendants (Node(label, grandchildren)::children) =
+      if label = wanted then true 
+      else 
+        amongst_descendants children orelse amongst_descendants grandchildren
+in
+  rootlabel = wanted orelse amongst_descendants children
+end
 
 (* height tree
    TYPE: 'a ltree -> int
@@ -138,5 +198,22 @@ end;
    EXAMPLE: height Node ("hej", []) = 1;
 *)
 (* VARIANT: count tree *)
-fun height (Node (label, [])) = 1
-  | height (Node (label, (c::cs))) = 1 + Int.max((height c), height (Node (label, cs)) - 1);
+fun height' (Node (label, [])) = 1
+  | height' (Node (label, (c::cs))) = 1 + Int.max((height' c), height' (Node (label, cs)) - 1);
+
+(* Alternative implementation, same specification *)
+(* VARIANT: height of tree *)
+fun height (Node(_, children)) = 
+let
+  (* max_height trees
+     TYPE: 'a ltree list -> int
+     PRE: true
+     POST: maximal height of trees
+  *)
+  (* VARIANT: length of trees *)
+  fun max_height [] = 0
+    | max_height (Node(_, grandchildren)::[]) = 1 + max_height grandchildren 
+    | max_height (child::siblings) = Int.max(height child, max_height siblings)
+in
+  1 + max_height children
+end
