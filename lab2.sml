@@ -25,10 +25,11 @@ fun iota N =
 (* 2. Intersection *)
 
 (* member x l
-   TYPE: int -> int list -> bool
+   TYPE: ''a -> ''a list -> bool
    PRE: true
    POST: returns true if x is a member of l, otherwise false
 *)
+(* VARIANT: length of l *)
 fun member x [] = false
   | member x (y::ys) = x=y orelse (member x ys);
 
@@ -44,7 +45,7 @@ fun inter s1 [] = []
   | inter (elem::r1) s2 = if member elem s2 then elem :: (inter r1 s2) else inter r1 s2
 
 (* inter' s1 s2
-TYPE: ''a list -> ''a list -> ''a list
+TYPE: int list -> int list -> int list
 PRE: elements of s1 and s2 are not repeated and ordered (ascending)
 POST: intesection between s1 and s2
 EXAMPLES: inter' [1, 4, 8, 12] [1, 3, 9, 12, 15] = [1, 12]
@@ -90,8 +91,8 @@ in
 end;
 
 (* 4. Trees *)
-(* REPRESENTATION CONVENTION: tree of nodes with an arbitrary number of children
-   REPRESENTATION INVARIANT: a tree has at least one node
+(* REPRESENTATION CONVENTION: none
+   REPRESENTATION INVARIANT: none
 *)
 datatype 'a ltree = Node of 'a * 'a ltree list;
 
@@ -101,6 +102,7 @@ datatype 'a ltree = Node of 'a * 'a ltree list;
    POST: the number of nodes in the tree
    EXAMPLE: count Node ("hej", []) = 1;
 *)
+(* VARIANT: number of nodes in tree *)
 fun count (Node (label, [])) = 1
   | count (Node (label, (c::cs))) = (count c) + count (Node (label, cs));
 
@@ -110,6 +112,7 @@ fun count (Node (label, [])) = 1
    POST: list of labels in the tree
    EXAMPLE: labels Node ("hej", []) = ["hej"];
 *)
+(* VARIANT: number of nodes in tree *)
 fun labels (Node (label, [])) = [label]
   | labels (Node (label, (c::cs))) = labels c @ labels (Node (label, cs));
 
@@ -121,6 +124,12 @@ fun labels (Node (label, [])) = [label]
 *)
 fun is_present tree x =
 let
+  (* helper tree
+     TYPE: 'a ltree -> bool
+     PRE: true
+     POST: returns true if x is a label in tree, otherwise false
+  *)
+  (* VARIANT: number of nodes in tree *)
   fun helper (Node (label, [])) = if label=x then true else false
     | helper (Node (label, (c::cs))) = helper c orelse helper (Node (label, cs))
 in
@@ -133,5 +142,6 @@ end;
    POST: returns the height of the tree
    EXAMPLE: height Node ("hej", []) = 1;
 *)
+(* VARIANT: number of nodes in tree *)
 fun height (Node (label, [])) = 1
   | height (Node (label, (c::cs))) = 1 + Int.max((height c), height (Node (label, cs)) - 1);
